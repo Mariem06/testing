@@ -18,7 +18,7 @@ jobs:
           bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
           customHeaders: '{"Content-Type": "application/json"}'
       
-      - run: echo "${{fromJson( steps.artifacts.outputs.response).items}}"
+      - run: echo "${{fromJson( steps.artifacts.outputs.response).items[0]}}"
 
 
       
