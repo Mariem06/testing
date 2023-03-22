@@ -19,7 +19,8 @@ jobs:
           customHeaders: '{"Content-Type": "application/json"}'
       
       - run: echo "hiiiiiiiiiiiiiiiiii"
-        if: ${{ length( ${{fromJson( steps.artifacts.outputs.response).items}} ) > 0 }}
+        if: ${{ length( ${{fromJson(steps.artifacts.outputs.response).items}} ) > 0 }}
+
 
 
 
