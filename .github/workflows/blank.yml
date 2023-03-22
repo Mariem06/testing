@@ -24,6 +24,15 @@ jobs:
           method: 'GET'
           bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
           customHeaders: '{"Content-Type": "application/json"}'
-      - name: Execute promotion
+      - name: test
         run : echo "${{fromJson( steps.promotion.outputs.response)[0].executable }}"
+      - name: Execute promotion
+        uses: fjogeleit/http-request-action@v1
+        id: execute
+        with:
+          url: 'https://api.eu.cloud.talend.com/tmc/v2.6/executions/promotions'
+          method: 'POST'
+          bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: '{"executable": "641ac1567c2d941981b28ca5", "keepTargetResources": true, "advanced": { "artifactId": "6419a43aff04f214762c32c9", "artifactType": "ACTION" }}'
 
