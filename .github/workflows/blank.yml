@@ -35,4 +35,19 @@ jobs:
           bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
           customHeaders: '{"Content-Type": "application/json"}'
           data: '{"executable": "641ac1567c2d941981b28ca5", "keepTargetResources": true, "advanced": { "artifactId": "6419a43aff04f214762c32c9", "artifactType": "ACTION" }}'
-
+      - name: Get DEV environment
+        uses: fjogeleit/http-request-action@v1
+        id: dev
+        with:
+          url: 'https://api.eu.cloud.talend.com/tmc/v2.6/environments?query=name%3D%3Ddev'
+          method: 'GET'
+          bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
+          customHeaders: '{"Content-Type": "application/json"}'
+      - name: Get Artifacts
+        uses: fjogeleit/http-request-action@v1
+        id: artifacts
+        with:
+          url: 'https://api.eu.cloud.talend.com/tmc/v2.6/artifacts?name=${{ matrix.word }}&environmentId=${{fromJson( steps.dev.outputs.response)[0].id }}'
+          method: 'GET'
+          bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
+          customHeaders: '{"Content-Type": "application/json"}'
