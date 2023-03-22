@@ -25,5 +25,5 @@ jobs:
           bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
           customHeaders: '{"Content-Type": "application/json"}'
       - name: Execute promotion
-        run : echo "${{fromJson( steps.promotion.outputs.response)[0] }}"
+        run : echo "${{fromJson( steps.promotion.outputs.response)[0].executable }}"
 
