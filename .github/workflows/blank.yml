@@ -1,0 +1,29 @@
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  push:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Get DEV to UAT promotion
+        uses: fjogeleit/http-request-action@v1
+        id: promotion
+        with:
+          url: 'https://api.eu.cloud.talend.com/tmc/v2.6/executables/promotions?_s=name%3D%3Ddev%20to%20uat*'
+          method: 'GET'
+          bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
+          customHeaders: '{"Content-Type": "application/json"}'
+      - name: Execute promotion
+        run : echo "${{fromJson( steps.promotion.outputs.response).items[0].executable }}"
+
