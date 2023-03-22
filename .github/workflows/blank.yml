@@ -16,25 +16,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - name: Get DEV to UAT promotion
-        uses: fjogeleit/http-request-action@v1
-        id: promotion
-        with:
-          url: 'https://api.eu.cloud.talend.com/tmc/v2.6/executables/promotions?_s=name%3D%3Ddev%20to%20uat*'
-          method: 'GET'
-          bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
-          customHeaders: '{"Content-Type": "application/json"}'
-      - name: test
-        run : echo "${{fromJson( steps.promotion.outputs.response)[0].executable }}"
-      - name: Execute promotion
-        uses: fjogeleit/http-request-action@v1
-        id: execute
-        with:
-          url: 'https://api.eu.cloud.talend.com/tmc/v2.6/executions/promotions'
-          method: 'POST'
-          bearerToken: igoZ4tK3R_2Hzf1Zj0XSkecbHPchWMEJzKILHp0n6EFKOJvDWj86SqOJnId8nyYi
-          customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"executable": "641ac1567c2d941981b28ca5", "keepTargetResources": true, "advanced": { "artifactId": "641993436419bf66f086aaea", "artifactType": "ACTION" }}'
       - name: Get DEV environment
         uses: fjogeleit/http-request-action@v1
         id: dev
