@@ -21,7 +21,7 @@ jobs:
       - run: echo " ${{fromJson(steps.artifacts.outputs.response).items}}.size()"
       - name: hello
         run: echo "hiiiiiiiiiiiiiiiiii"
-        if:  ${{fromJson(steps.artifacts.outputs.response).items[0]}} == null
+        if:  ${{fromJson(steps.artifacts.outputs.response).items[0]}} == [null]
 
 
 
