@@ -29,7 +29,7 @@ jobs:
         id: task_name
         run: |
           input_string="third_job"
-          task_name='$input_string ${{fromJson( steps.artifacts.outputs.response).items[0].executable }}'
+          task_name=echo("$input_string ${{fromJson( steps.artifacts.outputs.response).items[0].executable }}")
           echo "::set-output name=task_name::$task_name"
         shell: bash
       - name: test name 
