@@ -9,6 +9,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Test
+        run: | 
+         input_string="test_job_0.1"
+         trimmed_string="${input_string%%_*}"
+         echo "${trimmed_string}"
+
       - name: Get Artifacts
         uses: fjogeleit/http-request-action@v1
         id: artifacts
