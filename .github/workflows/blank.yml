@@ -12,7 +12,7 @@ jobs:
       - name: Test
         run: | 
          input_string="test_job_0.1"
-         trimmed_string="${input_string%%_*}"
+         trimmed_string=$(echo "${input_string}" | rev | cut -d '_' -f2- | rev)
          echo "${trimmed_string}"
 
       - name: Get Artifacts
