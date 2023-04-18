@@ -11,9 +11,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Test
         run: | 
-         input_string="test_job_0.1"
-         trimmed_string=$(echo "${input_string}" | rev | cut -d '_' -f2- | rev)
-         echo "${trimmed_string}"
+         job_with_version="test_job_0.1"
+         job_without_version=$(echo "${job_with_version}" | rev | cut -d '_' -f2- | rev)
+         echo $job_without_version
 
       - name: Get Artifacts
         uses: fjogeleit/http-request-action@v1
