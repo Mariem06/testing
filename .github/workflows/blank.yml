@@ -103,7 +103,25 @@ jobs:
           customHeaders: '{"Content-Type": "application/json"}'
           data: '{"workspaceId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.id }}", "name":"${{ steps.job_without_version.outputs.job_without_version }} execution",  "description": "Task detail description","tags": [ "tag1","tag2" ], "connections": {}, "parameters": {},"resources": {}, "artifact": {  "id": "${{fromJson( steps.artifacts.outputs.response).items[0].id }}",  "version": "${{fromJson( steps.artifacts.outputs.response).items[0].versions[0] }}"}, "autoUpgradeInfo": { "autoUpgradable": false,  "overrideWithDefaultParameters": false  },  "environmentId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.environment.id }}"}'
         if: ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }}
-     
+      - name: Configure the created task execution
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks/${{ fromJson(steps.new_task.outputs.response).id }}/run-config"
+          method: "PUT"
+          bearerToken: ${{ secrets.TMC_TOKEN }}
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: '{"trigger": { "type": "ONCE", "interval": 1, "startDate": "${{ steps.date.outputs.date }}", "timeZone": "Europe/London","atTimes": { "type": "AT_TIME", "time": "${{ steps.london_time.outputs.london_time }}" }, "atDays": {}, "webhook": {}},"runtime": {"type": "CLOUD"} }'
+        if: ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }}
+      - name: Configure the created task execution
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks/${{ steps.task_check.outputs.task_executable }}/run-config"
+          method: "PUT"
+          bearerToken: ${{ secrets.TMC_TOKEN }}
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: '{"trigger": { "type": "ONCE", "interval": 1, "startDate": "${{ steps.date.outputs.date }}", "timeZone": "Europe/London","atTimes": { "type": "AT_TIME", "time": "${{ steps.london_time.outputs.london_time }}" }, "atDays": {}, "webhook": {}},"runtime": {"type": "CLOUD"} }'
+        if: not( ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }} ) 
+
      # - name: Get Executable Tasks
       #   uses: fjogeleit/http-request-action@v1
       #   with:
