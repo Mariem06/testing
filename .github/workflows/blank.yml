@@ -101,7 +101,7 @@ jobs:
           method: "POST"
           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
           customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"workspaceId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.id }}", "name":"${{ steps.task_name.outputs.task_name }}",  "description": "Task detail description","tags": [ "tag1","tag2" ], "connections": {}, "parameters": {},"resources": {}, "artifact": {  "id": "${{fromJson( steps.artifacts.outputs.response).items[0].id }}",  "version": "${{fromJson( steps.artifacts.outputs.response).items[0].versions[0] }}"}, "autoUpgradeInfo": { "autoUpgradable": false,  "overrideWithDefaultParameters": false  },  "environmentId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.environment.id }}"}'
+          data: '{"workspaceId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.id }}", "name":"${{ steps.job_without_version.outputs.job_without_version }} execution",  "description": "Task detail description","tags": [ "tag1","tag2" ], "connections": {}, "parameters": {},"resources": {}, "artifact": {  "id": "${{fromJson( steps.artifacts.outputs.response).items[0].id }}",  "version": "${{fromJson( steps.artifacts.outputs.response).items[0].versions[0] }}"}, "autoUpgradeInfo": { "autoUpgradable": false,  "overrideWithDefaultParameters": false  },  "environmentId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.environment.id }}"}'
         if: ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }}
      
      # - name: Get Executable Tasks
