@@ -86,7 +86,7 @@ jobs:
       - name: task id
         id: task_id
         run: |
-          task_executable=${{fromJson(steps.tasks.outputs.response).items[0].executable}}
+          task_executable="hello ${{fromJson(steps.tasks.outputs.response).items[0].executable}}"
           echo "::set-output name=task_executable::$task_executable"
         shell: bash
       - run: |
