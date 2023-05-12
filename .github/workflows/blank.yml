@@ -75,7 +75,7 @@ jobs:
           method: "GET"
           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
           customHeaders: '{"Content-Type": "application/json"}'
-      - name: Verify the existance of the task
+      - name: Get Tasks
         uses: fjogeleit/http-request-action@v1
         id: tasks
         with:
@@ -83,26 +83,28 @@ jobs:
           method: "GET"
           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
           customHeaders: '{"Content-Type": "application/json"}'
-      - name: task id
-        id: task_id
+      - name: Verify the existance of the task
+        id: task_check
         run: |
           task_executable="${{fromJson(steps.tasks.outputs.response).items[0].executable}}"
           echo "::set-output name=task_executable::$task_executable"
         shell: bash
       - run: |
-          echo "1- ${{steps.task_id.outputs.task_executable}}"
-        if: ${{ (steps.task_id.outputs.task_executable == '') || (steps.task_id.outputs.task_executable == null)  }}
+          echo "Create Task - OK "
+        if: ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }}
      
-      # - name: Create Task
-      #   uses: fjogeleit/http-request-action@v1
-      #   id: new_task
-      #   with:
-      #     url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks"
-      #     method: "POST"
-      #     bearerToken: ${{ secrets.TMC_TOKEN }}
-      #     customHeaders: '{"Content-Type": "application/json"}'
-      #     data: '{"workspaceId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.id }}", "name":"${{ steps.task_name.outputs.task_name }}",  "description": "Task detail description","tags": [ "tag1","tag2" ], "connections": {}, "parameters": {},"resources": {}, "artifact": {  "id": "${{fromJson( steps.artifacts.outputs.response).items[0].id }}",  "version": "${{fromJson( steps.artifacts.outputs.response).items[0].versions[0] }}"}, "autoUpgradeInfo": { "autoUpgradable": false,  "overrideWithDefaultParameters": false  },  "environmentId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.environment.id }}"}'
-      # - name: Get Executable Tasks
+      - name: Create Task
+        uses: fjogeleit/http-request-action@v1
+        id: new_task
+        with:
+          url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks"
+          method: "POST"
+          bearerToken: ${{ secrets.TMC_TOKEN }}
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: '{"workspaceId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.id }}", "name":"${{ steps.task_name.outputs.task_name }}",  "description": "Task detail description","tags": [ "tag1","tag2" ], "connections": {}, "parameters": {},"resources": {}, "artifact": {  "id": "${{fromJson( steps.artifacts.outputs.response).items[0].id }}",  "version": "${{fromJson( steps.artifacts.outputs.response).items[0].versions[0] }}"}, "autoUpgradeInfo": { "autoUpgradable": false,  "overrideWithDefaultParameters": false  },  "environmentId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.environment.id }}"}'
+        if: ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }}
+     
+     # - name: Get Executable Tasks
       #   uses: fjogeleit/http-request-action@v1
       #   with:
       #     url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks"
