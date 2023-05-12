@@ -90,7 +90,11 @@ jobs:
           echo "::set-output name=task_executable::$task_executable"
         shell: bash
       - run: |
-          echo "${{steps.task_id.outputs.task_executable}}"
+          echo "1- ${{steps.task_id.outputs.task_executable}}"
+        if: ${{ (steps.task_id.outputs.task_executable == '') }}
+      - run: |
+          echo "2- ${{steps.task_id.outputs.task_executable}}"
+        if: ${{ (steps.task_id.outputs.task_executable == null) }}
       # - name: Create Task
       #   uses: fjogeleit/http-request-action@v1
       #   id: new_task
