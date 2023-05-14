@@ -9,6 +9,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - run: |
+          input_string=" [CT-13] description {third_job_0.1} workspace_name=PLM"
+          workspace_name=$(echo "$input_string" | grep -oP 'workspace_name\s*=\s*\K[^ ]+')
+          echo "La valeur de workspace_name est : $workspace_name"
+      
 #       - name: Test
 #         run: | 
 #          job_with_version="test_job_0.1"
@@ -43,94 +48,94 @@ jobs:
 #       - name: test name 
 #         run: echo   "${{ steps.task_name.outputs.task_name }}"
         
-     
-      - name: Get DEV environment
-        uses: fjogeleit/http-request-action@v1
-        id: dev
-        with:
-          url: "https://api.eu.cloud.talend.com/tmc/v2.6/environments?query=name%3D%3DDEV"
-          method: "GET"
-          bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
-          customHeaders: '{"Content-Type": "application/json"}'
-      - name: Get Workspace
-        uses: fjogeleit/http-request-action@v1
-        id: workspace
-        with:
-          url: "https://api.eu.cloud.talend.com/tmc/v2.6/workspaces?query=name%3D%3DPLM%2Cenvironment.name%3D%3DDEV"
-          method: "GET"
-          bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
-          customHeaders: '{"Content-Type": "application/json"}'
-      - name: Extract the name of the job
-        id: job_without_version
-        run: |
-          job_with_version="test_job_0.1"
-          job_without_version=$(echo "${job_with_version}" | rev | cut -d '_' -f2- | rev)
-          echo "::set-output name=job_without_version::$job_without_version"
+# ##################################################################333     
+#       - name: Get DEV environment
+#         uses: fjogeleit/http-request-action@v1
+#         id: dev
+#         with:
+#           url: "https://api.eu.cloud.talend.com/tmc/v2.6/environments?query=name%3D%3DDEV"
+#           method: "GET"
+#           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
+#           customHeaders: '{"Content-Type": "application/json"}'
+#       - name: Get Workspace
+#         uses: fjogeleit/http-request-action@v1
+#         id: workspace
+#         with:
+#           url: "https://api.eu.cloud.talend.com/tmc/v2.6/workspaces?query=name%3D%3DPLM%2Cenvironment.name%3D%3DDEV"
+#           method: "GET"
+#           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
+#           customHeaders: '{"Content-Type": "application/json"}'
+#       - name: Extract the name of the job
+#         id: job_without_version
+#         run: |
+#           job_with_version="test_job_0.1"
+#           job_without_version=$(echo "${job_with_version}" | rev | cut -d '_' -f2- | rev)
+#           echo "::set-output name=job_without_version::$job_without_version"
 
-      - name: Get Artifacts
-        uses: fjogeleit/http-request-action@v1
-        id: artifacts
-        with:
-          url: "https://api.eu.cloud.talend.com/tmc/v2.6/artifacts?name=${{ steps.job_without_version.outputs.job_without_version }}&environmentId=${{fromJson( steps.dev.outputs.response)[0].id }}"
-          method: "GET"
-          bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
-          customHeaders: '{"Content-Type": "application/json"}'
-      - name: Get Tasks
-        uses: fjogeleit/http-request-action@v1
-        id: tasks
-        with:
-          url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks?environmentId=${{fromJson( steps.dev.outputs.response)[0].id }}&workspaceId=${{fromJson( steps.workspace.outputs.response)[0].id }}&artifactId=${{fromJson( steps.artifacts.outputs.response).items[0].id }}"
-          method: "GET"
-          bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
-          customHeaders: '{"Content-Type": "application/json"}'
-      - name: Verify the existance of the task
-        id: task_check
-        run: |
-          task_executable="${{fromJson(steps.tasks.outputs.response).items[0].executable}}"
-          echo "::set-output name=task_executable::$task_executable"
-        shell: bash
+#       - name: Get Artifacts
+#         uses: fjogeleit/http-request-action@v1
+#         id: artifacts
+#         with:
+#           url: "https://api.eu.cloud.talend.com/tmc/v2.6/artifacts?name=${{ steps.job_without_version.outputs.job_without_version }}&environmentId=${{fromJson( steps.dev.outputs.response)[0].id }}"
+#           method: "GET"
+#           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
+#           customHeaders: '{"Content-Type": "application/json"}'
+#       - name: Get Tasks
+#         uses: fjogeleit/http-request-action@v1
+#         id: tasks
+#         with:
+#           url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks?environmentId=${{fromJson( steps.dev.outputs.response)[0].id }}&workspaceId=${{fromJson( steps.workspace.outputs.response)[0].id }}&artifactId=${{fromJson( steps.artifacts.outputs.response).items[0].id }}"
+#           method: "GET"
+#           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
+#           customHeaders: '{"Content-Type": "application/json"}'
+#       - name: Verify the existance of the task
+#         id: task_check
+#         run: |
+#           task_executable="${{fromJson(steps.tasks.outputs.response).items[0].executable}}"
+#           echo "::set-output name=task_executable::$task_executable"
+#         shell: bash
       
-      - name: Create Task
-        uses: fjogeleit/http-request-action@v1
-        id: new_task
-        with:
-          url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks"
-          method: "POST"
-          bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
-          customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"workspaceId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.id }}", "name":"${{ steps.job_without_version.outputs.job_without_version }} execution",  "description": "Task detail description","tags": [ "tag1","tag2" ], "connections": {}, "parameters": {},"resources": {}, "artifact": {  "id": "${{fromJson( steps.artifacts.outputs.response).items[0].id }}",  "version": "${{fromJson( steps.artifacts.outputs.response).items[0].versions[0] }}"}, "autoUpgradeInfo": { "autoUpgradable": true,  "overrideWithDefaultParameters": true  },  "environmentId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.environment.id }}"}'
-        if: ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }}
-      - name: Set timezone
-        run: sudo timedatectl set-timezone Europe/London
-      - name: Get current date in Europe/London timezone
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      - name: Get London Time
-        id: london_time
-        run: |
-          echo "::set-output name=london_time::$(date -d '+2 minutes' '+%H:%M')"
-        shell: bash
-        env:
-          TZ: Europe/London
-      - name: Configure the created task execution
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks/${{ fromJson(steps.new_task.outputs.response).id }}/run-config"
-          method: "PUT"
-          bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
-          customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"trigger": { "type": "ONCE", "interval": 1, "startDate": "${{ steps.date.outputs.date }}", "timeZone": "Europe/London","atTimes": { "type": "AT_TIME", "time": "${{ steps.london_time.outputs.london_time }}" }, "atDays": {}, "webhook": {}},"runtime": {"type": "CLOUD"} }'
-        if: ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }}
-      - name: Configure the existed task execution
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks/${{ steps.task_check.outputs.task_executable }}/run-config"
-          method: "PUT"
-          bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
-          customHeaders: '{"Content-Type": "application/json"}'
-          data: '{"trigger": { "type": "ONCE", "interval": 1, "startDate": "${{ steps.date.outputs.date }}", "timeZone": "Europe/London","atTimes": { "type": "AT_TIME", "time": "${{ steps.london_time.outputs.london_time }}" }, "atDays": {}, "webhook": {}},"runtime": {"type": "CLOUD"} }'
-        if: not( ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }} ) 
-
+#       - name: Create Task
+#         uses: fjogeleit/http-request-action@v1
+#         id: new_task
+#         with:
+#           url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks"
+#           method: "POST"
+#           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
+#           customHeaders: '{"Content-Type": "application/json"}'
+#           data: '{"workspaceId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.id }}", "name":"${{ steps.job_without_version.outputs.job_without_version }} execution",  "description": "Task detail description","tags": [ "tag1","tag2" ], "connections": {}, "parameters": {},"resources": {}, "artifact": {  "id": "${{fromJson( steps.artifacts.outputs.response).items[0].id }}",  "version": "${{fromJson( steps.artifacts.outputs.response).items[0].versions[0] }}"}, "autoUpgradeInfo": { "autoUpgradable": true,  "overrideWithDefaultParameters": true  },  "environmentId": "${{fromJson( steps.artifacts.outputs.response).items[0].workspace.environment.id }}"}'
+#         if: ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }}
+#       - name: Set timezone
+#         run: sudo timedatectl set-timezone Europe/London
+#       - name: Get current date in Europe/London timezone
+#         id: date
+#         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+#       - name: Get London Time
+#         id: london_time
+#         run: |
+#           echo "::set-output name=london_time::$(date -d '+2 minutes' '+%H:%M')"
+#         shell: bash
+#         env:
+#           TZ: Europe/London
+#       - name: Configure the created task execution
+#         uses: fjogeleit/http-request-action@v1
+#         with:
+#           url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks/${{ fromJson(steps.new_task.outputs.response).id }}/run-config"
+#           method: "PUT"
+#           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
+#           customHeaders: '{"Content-Type": "application/json"}'
+#           data: '{"trigger": { "type": "ONCE", "interval": 1, "startDate": "${{ steps.date.outputs.date }}", "timeZone": "Europe/London","atTimes": { "type": "AT_TIME", "time": "${{ steps.london_time.outputs.london_time }}" }, "atDays": {}, "webhook": {}},"runtime": {"type": "CLOUD"} }'
+#         if: ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }}
+#       - name: Configure the existed task execution
+#         uses: fjogeleit/http-request-action@v1
+#         with:
+#           url: "https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks/${{ steps.task_check.outputs.task_executable }}/run-config"
+#           method: "PUT"
+#           bearerToken: kn4_bZbQTb2z6TkxAZW-BEC2IX2aCiFkYB9yNP3k_WMPs7I9YXfvkM2CjStonnQW
+#           customHeaders: '{"Content-Type": "application/json"}'
+#           data: '{"trigger": { "type": "ONCE", "interval": 1, "startDate": "${{ steps.date.outputs.date }}", "timeZone": "Europe/London","atTimes": { "type": "AT_TIME", "time": "${{ steps.london_time.outputs.london_time }}" }, "atDays": {}, "webhook": {}},"runtime": {"type": "CLOUD"} }'
+#         if: not( ${{ (steps.task_check.outputs.task_executable == '') || (steps.task_check.outputs.task_executable == null)  }} ) 
+###########################################################################
      # - name: Get Executable Tasks
       #   uses: fjogeleit/http-request-action@v1
       #   with:
