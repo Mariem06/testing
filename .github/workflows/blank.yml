@@ -14,6 +14,8 @@ jobs:
          IFS=',' read -ra words <<< "$message"
          main_job="${words[0]}"
          echo $main_job
+         string_without_first_element=$(echo "$message" | cut -d ',' -f 2-)
+         echo $string_without_first_element
           
 #       - name: Maven build & publish Talend artifacts to Talend Cloud Test jobs
 #         env:
