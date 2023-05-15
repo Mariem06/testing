@@ -16,8 +16,7 @@ jobs:
           IFS=',' read -ra words <<< "$message"
           for word in "${words[@]}"; do
             lowercase_word=$(echo "$word" | tr '[:upper:]' '[:lower:]')
-            # Use the transformed lowercase_word variable as needed
-            # ...
+            echo $lowercase_word
           done
       
 #       - name: Test
