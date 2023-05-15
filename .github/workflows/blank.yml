@@ -19,7 +19,7 @@ jobs:
           done
       - run: |
           url="https://api.eu.cloud.talend.com/tmc/v2.6/executions"
-          data='{"executable": "646254c078cf1a473c63e5fd"}'
+          data='{"executable": "64627322d5380f70c1d1d994"}'
           response=$(curl -X POST $url -H "Content-Type: application/json" -H "Authorization: bearer -kno-jXfSKC-3vH_yLwSShQid01c-U0gQuvqeFOxD6DQHxFxsIhp6c6p1bXw2JvG" -d "$data")
           executionId=$(echo $response | jq -r '.executionId')
           echo $executionId
@@ -27,11 +27,15 @@ jobs:
           while [ "$status" != "execution_successful" ]
           do
             echo "test"
-            sleep 10
+            sleep 5
             url2=https://api.eu.cloud.talend.com/tmc/v2.6/executions/$executionId
             response2=$(curl -X GET $url2 -H "Content-Type: application/json" -H "Authorization: bearer -kno-jXfSKC-3vH_yLwSShQid01c-U0gQuvqeFOxD6DQHxFxsIhp6c6p1bXw2JvG")
             status=$(echo $response2 | jq -r '.status')
             echo $status
+            if [ $status == "execution_failed" ]; then
+             echo "execution_failed"
+             exit 1
+           fi
           done
 
 
