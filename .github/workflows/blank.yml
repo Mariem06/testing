@@ -24,7 +24,7 @@ jobs:
           executionId=$(echo $response | jq -r '.executionId')
           echo $executionId
           status=""
-          while [ status !="execution_successful" ]
+          while status !="execution_successful" 
           do
             sleep 10
             url2=https://api.eu.cloud.talend.com/tmc/v2.6/executions/$executionId
