@@ -24,7 +24,7 @@ jobs:
           executionId=$(echo $response | jq -r '.executionId')
           echo $executionId
           status=""
-          while ($status !="execution_successful" )
+          while ($status != "execution_successful" )
           do
             echo "test"
             sleep 10
