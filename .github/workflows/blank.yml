@@ -13,7 +13,7 @@ jobs:
          message="test,second"
          IFS=',' read -ra words <<< "$message"
          main_job="${words[0]}"
-         echo '$main_job'
+         echo $main_job
           
 #       - name: Maven build & publish Talend artifacts to Talend Cloud Test jobs
 #         env:
