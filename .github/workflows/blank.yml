@@ -17,13 +17,20 @@ jobs:
           for word in "${words[@]}"; do
             echo $(echo "$word" | tr '[:upper:]' '[:lower:]')
           done
-      - uses: emilioschepis/wait-for-endpoint@v1.0.3
-        with:
-          url: https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks/64625bdc78cf1a473c63e654/executions
-          method: GET
-          expected-status: "execution_successful"
-          timeout: 60000
-          interval: 1000
+      - run: |
+          url="https://api.eu.cloud.talend.com/tmc/v2.6/executions"
+          data='{"executable": "64625bdc78cf1a473c63e654"}'
+          response=$(curl -X POST $url -H "Content-Type: application/json" -H "Authorization: bearer $(talend_cloud_token)" -d "$data")
+          executionId=$(echo $response | jq -r '.executionId')
+          status=""
+          while [ status !="execution_successful" ]
+          do
+            sleep 10
+            url2=https://api.eu.cloud.talend.com/tmc/v2.6/executions/$executionId
+            response2=$(curl -X GET $url2 -H "Content-Type: application/json" -H "Authorization: bearer -kno-jXfSKC-3vH_yLwSShQid01c-U0gQuvqeFOxD6DQHxFxsIhp6c6p1bXw2JvG")
+            status=$(echo $response | jq -r '. status')
+          done
+
 
 #       - name: Test
 #         run: | 
