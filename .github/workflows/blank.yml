@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-         message="test,second"
+         message="test,second,third"
          IFS=',' read -ra words <<< "$message"
          main_job="${words[0]}"
          echo $main_job
