@@ -17,14 +17,14 @@ jobs:
           for word in "${words[@]}"; do
             echo $(echo "$word" | tr '[:upper:]' '[:lower:]')
           done
-      - name: Wait for tests to succeed
-        uses: lewagon/wait-on-check-action@v1.3.1
+      - uses: emilioschepis/wait-for-endpoint@v1.0.3
         with:
-          ref: master
-          check-name: test
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 20
-      
+          url: https://api.eu.cloud.talend.com/tmc/v2.6/executables/tasks/64625bdc78cf1a473c63e654/executions
+          method: GET
+          expected-status: "execution_successful"
+          timeout: 60000
+          interval: 1000
+
 #       - name: Test
 #         run: | 
 #          job_with_version="test_job_0.1"
