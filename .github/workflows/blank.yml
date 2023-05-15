@@ -17,6 +17,13 @@ jobs:
           for word in "${words[@]}"; do
             echo $(echo "$word" | tr '[:upper:]' '[:lower:]')
           done
+      - name: Wait for tests to succeed
+        uses: lewagon/wait-on-check-action@v1.3.1
+        with:
+          ref: master
+          check-name: test
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 20
       
 #       - name: Test
 #         run: | 
