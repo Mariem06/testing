@@ -9,10 +9,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: |
-          input_string=" [CT-13] description {third_job_0.1} workspace_name=PLM"
-          workspace_name=$(echo "$input_string" | grep -oP 'workspace_name\s*=\s*\K[^ ]+')
-          echo "La valeur de workspace_name est : $workspace_name"
+      - name: Maven build & publish Talend artifacts to Talend Cloud Test jobs
+        env:
+          message: "j_test_Pricebook_SFCC_to_EARLYBIRDS_All_Files_Consumed,j_test_Pricebook_SFCC_to_EARLYBIRDS_Diffrent_XML_schema"
+        run: |
+          IFS=',' read -ra words <<< "$message"
+          for word in "${words[@]}"; do
+            lowercase_word=$(echo "$word" | tr '[:upper:]' '[:lower:]')
+            # Use the transformed lowercase_word variable as needed
+            # ...
+          done
       
 #       - name: Test
 #         run: | 
