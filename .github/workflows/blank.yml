@@ -10,13 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-         message="test,second,third"
-         IFS=',' read -ra words <<< "$message"
-         main_job="${words[0]}"
-         echo $main_job
-         string_without_first_element=$(echo "$message" | cut -d ',' -f 2-)
-         echo $string_without_first_element
-          
+          chaine="exemple_de_chaine_a_traiter"
+          partie_apres_dernier_underscore=${chaine##*_}
+          echo $partie_apres_dernier_underscore
+      
 #       - name: Maven build & publish Talend artifacts to Talend Cloud Test jobs
 #         env:
 #           message: "j_test_Pricebook_SFCC_to_EARLYBIRDS_All_Files_Consumed,j_test_Pricebook_SFCC_to_EARLYBIRDS_Diffrent_XML_schema"
