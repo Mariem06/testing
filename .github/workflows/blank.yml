@@ -11,8 +11,9 @@ jobs:
       - uses: actions/checkout@v3
       - run: |
           chaine="exemple_de_chaine_a_traiter"
-          partie_apres_dernier_underscore=${chaine##*_}
-          echo $partie_apres_dernier_underscore
+          partie_apres_avant_dernier_underscore=$(echo "$chaine" | awk -F'_' '{print $(NF-1)}')
+          echo "$partie_apres_avant_dernier_underscore"
+
       
 #       - name: Maven build & publish Talend artifacts to Talend Cloud Test jobs
 #         env:
